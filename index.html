@@ -60,6 +60,9 @@
     ]
   }
   </script>
+  <!-- Performance: preload critical assets -->
+  <link rel="preload" href="logo-opencore.png" as="image" />
+  <link rel="preload" href="hero_tech_brain_bg.png" as="image" fetchpriority="low" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -219,9 +222,11 @@
     .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(130px);
+      filter: blur(80px);
       opacity: .14;
-      animation: fOrb 20s ease-in-out infinite
+      animation: fOrb 20s ease-in-out infinite;
+      will-change: transform;
+      transform: translateZ(0);
     }
 
     .o1 {
@@ -506,6 +511,10 @@
     }
 
     @media(max-width:768px) {
+
+      /* Performance: eliminar efectos pesados en mobile */
+      body::before, body::after { display: none !important; }
+      .orb { display: none !important; }
 
       .nav-links,
       .btn-nav {
@@ -3612,38 +3621,79 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
-        padding: 0 28px;
+        padding: 0 32px;
       }
 
-      /* ── Hexagon icon ── */
-      .splash-hex {
-        width: 68px;
-        height: 68px;
-        margin-bottom: 24px;
+      /* ── Logo wrapper ── */
+      .splash-logo-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        padding: 24px 32px;
         opacity: 0;
-        transform: scale(0.4) rotate(-45deg);
-        animation: splashHexIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
-        filter: drop-shadow(0 0 22px rgba(0, 194, 255, 0.7));
+        transform: translateY(28px) scale(0.9);
+        animation: splashLogoIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
       }
 
-      @keyframes splashHexIn {
-        to { opacity: 1; transform: scale(1) rotate(0deg); }
+      /* Outer glow ring */
+      .splash-logo-wrap::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(0, 194, 255, 0.22);
+        border-radius: 16px;
+        animation: splashRingPulse 2.4s ease-in-out 1.4s infinite alternate;
       }
 
-      /* ── Brand name ── */
-      .splash-brand {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 2.8rem;
-        font-weight: 700;
-        letter-spacing: 0.18em;
-        margin-bottom: 6px;
+      /* Inner ambient glow */
+      .splash-logo-wrap::after {
+        content: '';
+        position: absolute;
+        inset: -30px;
+        background: radial-gradient(ellipse 85% 65% at 50% 50%, rgba(0, 194, 255, 0.1), transparent 68%);
+        pointer-events: none;
+        animation: splashGlowPulse 2.4s ease-in-out 1.4s infinite alternate;
+      }
+
+      .splash-logo-img {
+        width: min(230px, 62vw);
+        height: auto;
+        display: block;
+        filter: drop-shadow(0 0 18px rgba(0, 194, 255, 0.5)) brightness(1.08);
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Corner bracket decorators */
+      .splash-corner {
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        border-color: rgba(0, 194, 255, 0.65);
+        border-style: solid;
         opacity: 0;
-        transform: translateY(16px);
-        animation: splashSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+        animation: splashFade 0.4s ease 1s forwards;
+      }
+      .splash-corner.tl { top: 6px; left: 6px; border-width: 1.5px 0 0 1.5px; }
+      .splash-corner.tr { top: 6px; right: 6px; border-width: 1.5px 1.5px 0 0; }
+      .splash-corner.bl { bottom: 6px; left: 6px; border-width: 0 0 1.5px 1.5px; }
+      .splash-corner.br { bottom: 6px; right: 6px; border-width: 0 1.5px 1.5px 0; }
+
+      @keyframes splashLogoIn {
+        to { opacity: 1; transform: translateY(0) scale(1); }
       }
 
-      .splash-brand .sp-open { color: #fff; }
-      .splash-brand .sp-core { color: #00C2FF; }
+      @keyframes splashRingPulse {
+        from { border-color: rgba(0, 194, 255, 0.18); box-shadow: none; }
+        to   { border-color: rgba(0, 194, 255, 0.55); box-shadow: 0 0 20px 2px rgba(0, 194, 255, 0.12); }
+      }
+
+      @keyframes splashGlowPulse {
+        from { opacity: 0.6; }
+        to   { opacity: 1; }
+      }
 
       @keyframes splashSlideUp {
         to { opacity: 1; transform: translateY(0); }
@@ -3834,16 +3884,13 @@
     <div id="mob-splash" aria-hidden="true">
       <div class="splash-scan"></div>
       <div class="splash-inner">
-        <!-- Hex logo -->
-        <svg class="splash-hex" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M30 2L57 17.5V52.5L30 68L3 52.5V17.5L30 2Z" stroke="#00C2FF" stroke-width="1.5" fill="rgba(0,194,255,0.05)"/>
-          <path d="M30 13L50 24.5V47.5L30 59L10 47.5V24.5L30 13Z" fill="rgba(0,194,255,0.09)" stroke="rgba(0,194,255,0.28)" stroke-width="1"/>
-          <circle cx="30" cy="36" r="6.5" fill="#00C2FF" opacity="0.88"/>
-          <circle cx="30" cy="36" r="3" fill="#fff" opacity="0.5"/>
-        </svg>
-        <!-- Brand -->
-        <div class="splash-brand">
-          <span class="sp-open">OPEN</span><span class="sp-core">CORE</span>
+        <!-- Logo principal con glow y corners -->
+        <div class="splash-logo-wrap">
+          <span class="splash-corner tl"></span>
+          <span class="splash-corner tr"></span>
+          <span class="splash-corner bl"></span>
+          <span class="splash-corner br"></span>
+          <img class="splash-logo-img" src="logo-opencore.png" alt="OpenCORE" decoding="async" />
         </div>
         <div class="splash-sub">Enterprise Consulting · Chile</div>
         <!-- Stats -->
@@ -5436,7 +5483,8 @@
           }
         }
 
-        for (let i = 0; i < 50; i++) particles.push(new Particle());
+        const _pCount = window.innerWidth < 1200 ? 28 : 42;
+        for (let i = 0; i < _pCount; i++) particles.push(new Particle());
 
         let mouseX = -1000, mouseY = -1000;
         document.addEventListener('mousemove', e => {
@@ -5447,7 +5495,11 @@
           mouseX = -1000; mouseY = -1000;
         });
 
-        const drawSynapses = () => {
+        let _lastFrame = 0;
+        const _fpsCap = 1000 / 40; // 40fps max
+        const drawSynapses = (ts) => {
+          if (ts - _lastFrame < _fpsCap) { requestAnimationFrame(drawSynapses); return; }
+          _lastFrame = ts;
           ctx.clearRect(0, 0, width, height);
 
           for (let i = 0; i < particles.length; i++) {
@@ -5498,7 +5550,7 @@
           }
           requestAnimationFrame(drawSynapses);
         };
-        drawSynapses();
+        drawSynapses(0);
       }
 
       /* ================================================
@@ -5831,6 +5883,71 @@
   })();
   </script>
 
+  <!-- COOKIE CONSENT BANNER -->
+  <style>
+    #ck-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      z-index: 8999;
+      width: min(600px, calc(100vw - 32px));
+      background: rgba(8, 12, 24, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(0, 194, 255, 0.18);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 194, 255, 0.04);
+      transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.5s ease;
+    }
+    #ck-banner.ck-hide {
+      transform: translateX(-50%) translateY(120%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .ck-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .ck-text {
+      flex: 1;
+      font-size: 0.78rem;
+      color: rgba(196, 215, 245, 0.85);
+      line-height: 1.5;
+    }
+    .ck-text a { color: #00C2FF; text-decoration: underline; text-underline-offset: 2px; }
+    .ck-btns { display: flex; gap: 8px; flex-shrink: 0; }
+    .ck-btn {
+      padding: 8px 18px;
+      border-radius: 9px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      border: none;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .ck-btn-accept {
+      background: linear-gradient(135deg, #00C2FF, #2563EB);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(0, 194, 255, 0.3);
+    }
+    .ck-btn-accept:hover { box-shadow: 0 0 24px rgba(0, 194, 255, 0.5); filter: brightness(1.1); }
+    .ck-btn-decline {
+      background: rgba(255,255,255,0.05);
+      color: rgba(196, 215, 245, 0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .ck-btn-decline:hover { background: rgba(255,255,255,0.09); color: #fff; }
+    @media (max-width: 520px) {
+      #ck-banner { flex-direction: column; align-items: flex-start; gap: 12px; bottom: 12px; }
+      .ck-btns { width: 100%; }
+      .ck-btn { flex: 1; text-align: center; }
+    }
+  </style>
+
   <!-- LEGAL MODALS -->
   <style>
     .ft-legal-links {
@@ -5975,4 +6092,51 @@
       document.body.style.overflow = 'hidden';
     }
     function closeLegalModalDirect() {
-      docum
+      document.getElementById('legalModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    function closeLegalModal(e) {
+      if (e.target === document.getElementById('legalModal')) closeLegalModalDirect();
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeLegalModalDirect();
+    });
+  </script>
+
+  <!-- Cookie Consent Banner -->
+  <div id="ck-banner" role="dialog" aria-label="Aviso de cookies" style="display:none">
+    <span class="ck-icon">🍪</span>
+    <div class="ck-text">
+      Usamos cookies esenciales y de analítica para mejorar tu experiencia.
+      <a href="#" onclick="openLegalModal('cookies'); return false;">Ver política</a>
+    </div>
+    <div class="ck-btns">
+      <button class="ck-btn ck-btn-accept" id="ck-accept">Aceptar</button>
+      <button class="ck-btn ck-btn-decline" id="ck-decline">Rechazar</button>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var CK_KEY = 'oc_cookie_consent';
+    var banner = document.getElementById('ck-banner');
+    if (!banner) return;
+    if (localStorage.getItem(CK_KEY)) return; // already decided
+    // Show after 1.5s
+    setTimeout(function(){ banner.style.display = 'flex'; }, 1500);
+    function hideBanner(){
+      banner.classList.add('ck-hide');
+      setTimeout(function(){ banner.style.display = 'none'; }, 600);
+    }
+    document.getElementById('ck-accept').addEventListener('click', function(){
+      localStorage.setItem(CK_KEY, 'accepted');
+      hideBanner();
+    });
+    document.getElementById('ck-decline').addEventListener('click', function(){
+      localStorage.setItem(CK_KEY, 'declined');
+      hideBanner();
+    });
+  })();
+  </script>
+</body>
+
+</html>
