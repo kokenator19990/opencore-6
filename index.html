@@ -3818,52 +3818,169 @@
     /* ================================================
        MOBILE PERFORMANCE — eliminar efectos pesados
     ================================================ */
+    /* ================================================
+       MOBILE — Rediseño definitivo. Desktop: sin tocar.
+    ================================================ */
     @media (max-width: 768px) {
-      /* Eliminar backdrop-filter en todo — es el mayor causante de lag */
-      .navbar,
-      .mob-menu,
-      .hero-stats,
-      .svc-card,
-      .cc,
-      .test-card,
-      .contact-wrap,
-      .leadmag-card,
-      .calc-section,
-      .modal-overlay,
-      #ck-banner {
+
+      /* 1. PURGA GLOBAL: backdrop-filter y text-shadow */
+      *, *::before, *::after {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
-        background: rgba(6,9,18,0.97) !important;
+        text-shadow: none !important;
       }
-      .navbar { background: rgba(4,6,14,0.98) !important; }
-      .mob-menu { background: rgba(4,6,14,0.99) !important; }
 
-      /* Simplificar box-shadows pesadas */
-      .svc-card, .cc, .test-card, .leadmag-card {
+      /* 2. OCULTAR: efectos pesados + secciones innecesarias */
+      .bg-orbs, #global-canvas, .global-canvas,
+      .hero-glow, .hero-bg, .mob-logo-center,
+      .mob-hero-spacer, .mob-hero-visual,
+      #c-dot, #c-ring, #c-aura,
+      .mq-sec, .exp-strip, .impact-banner,
+      .calc-section, .process, .tech { display: none !important; }
+
+      /* 3. BASE */
+      body { font-size: 16px !important; }
+      section { padding: 60px 0 !important; }
+      .container { padding: 0 20px !important; }
+
+      /* 4. NAVBAR — sólido, sin blur */
+      .navbar {
+        background: #04060f !important;
+        border-bottom: 1px solid rgba(0,194,255,0.12) !important;
         box-shadow: none !important;
       }
+      .navbar .logo { display: flex !important; }
+      .nav-links, .btn-nav { display: none !important; }
+      .ham { display: flex !important; }
+      .mob-menu { background: #04060f !important; border-bottom: 1px solid rgba(0,194,255,0.1) !important; }
+      .mob-menu .btn-nav { display: flex !important; margin-top: 8px; }
 
-      /* Desactivar hover transitions (touch no las necesita) */
-      .svc-card:hover, .cc:hover, .test-card:hover,
-      .btn-nav:hover, .ti:hover { transform: none !important; }
+      /* 5. HERO — limpio, centrado, sin imagen de fondo */
+      .hero {
+        min-height: 100svh !important;
+        padding: 96px 0 60px !important;
+        display: flex !important;
+        align-items: center !important;
+        background: linear-gradient(160deg, #030508 0%, #060912 55%, #080e1a 100%) !important;
+      }
+      .hero .container { display: block !important; min-height: unset !important; }
+      .hero .badge { animation: fadeUp 0.5s 0.1s both !important; margin-bottom: 18px; }
+      .hero h1 {
+        font-size: clamp(1.85rem, 7vw, 2.6rem) !important;
+        line-height: 1.22 !important;
+        margin-bottom: 18px !important;
+        animation: fadeUp 0.5s 0.2s both !important;
+      }
+      .hero .hero-lead {
+        font-size: 0.95rem !important;
+        line-height: 1.7 !important;
+        margin-bottom: 28px !important;
+        animation: fadeUp 0.5s 0.3s both !important;
+      }
+      .hero .hero-ctas {
+        flex-direction: column !important;
+        gap: 12px !important;
+        margin-bottom: 32px !important;
+        animation: fadeUp 0.5s 0.4s both !important;
+      }
+      .hero .hero-ctas .btn-primary,
+      .hero .hero-ctas .btn-secondary {
+        width: 100% !important;
+        justify-content: center !important;
+        box-shadow: none !important;
+      }
+      .hero .hero-ctas .btn-primary {
+        box-shadow: 0 0 28px rgba(0,194,255,0.22) !important;
+      }
+      .hero .cta-microcopy { text-align: center !important; }
+      .hero .hero-stats {
+        grid-template-columns: repeat(3,1fr) !important;
+        gap: 0 !important;
+        background: rgba(0,194,255,0.04) !important;
+        border: 1px solid rgba(0,194,255,0.12) !important;
+        border-radius: 14px !important;
+        box-shadow: none !important;
+        animation: fadeUp 0.5s 0.5s both !important;
+      }
 
-      /* Eliminar filter/drop-shadow en elementos no críticos */
-      .hero-glow { display: none !important; }
-      .bg-orbs   { display: none !important; }
+      /* 6. TRUST */
+      .tl-grid { grid-template-columns: repeat(2,1fr) !important; gap: 12px !important; }
 
-      /* content-visibility para secciones fuera de viewport */
-      .trust, .impact-banner, .calc-section, .challenge,
-      .exp-strip, .testimonials, .svc-sec, .cases,
-      .process, .tech, .leadmag-section, .contact {
+      /* 7. SECCIÓN TÍTULOS */
+      .sec-title { font-size: clamp(1.5rem, 5.5vw, 2rem) !important; }
+      .sec-sub   { font-size: 0.88rem !important; }
+      .sec-hdr   { margin-bottom: 32px !important; }
+
+      /* 8. SERVICIOS */
+      .svc-grid, .svc-grid-full { grid-template-columns: 1fr !important; gap: 14px !important; }
+      .svc-card {
+        background: #090f1f !important;
+        border: 1px solid rgba(0,194,255,0.11) !important;
+        box-shadow: none !important;
+        padding: 22px !important;
+        transition: none !important;
+      }
+      .svc-card::before, .svc-card:hover { transform: none !important; box-shadow: none !important; }
+      .svc-card::before { display: none !important; }
+
+      /* 9. CASOS */
+      .cases-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+      .cc {
+        background: #090f1f !important;
+        border: 1px solid rgba(0,194,255,0.1) !important;
+        box-shadow: none !important;
+        transition: none !important;
+      }
+      .cc::before { display: none !important; }
+
+      /* 10. TESTIMONIALS */
+      .test-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+      .test-card {
+        background: #090f1f !important;
+        border: 1px solid rgba(255,255,255,0.05) !important;
+        box-shadow: none !important;
+        padding: 22px !important;
+        transition: none !important;
+      }
+
+      /* 11. CHALLENGE / QUIÉNES SOMOS */
+      .ch-grid, .ch-grid-v2 { grid-template-columns: 1fr !important; gap: 14px !important; }
+      .ch-card { background: #090f1f !important; box-shadow: none !important; }
+
+      /* 12. CONTACTO */
+      .contact-inner { grid-template-columns: 1fr !important; }
+      .contact-left {
+        padding: 32px 22px !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(0,194,255,0.08) !important;
+      }
+      .contact-right { padding: 32px 22px !important; }
+      .contact-wrap {
+        background: #090f1f !important;
+        border: 1px solid rgba(0,194,255,0.11) !important;
+        box-shadow: none !important;
+      }
+      .contact-wrap::after { display: none !important; }
+      .f-row { grid-template-columns: 1fr !important; }
+
+      /* 13. LEADMAG */
+      .lm-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+      .leadmag-card { background: #090f1f !important; box-shadow: none !important; }
+
+      /* 14. FOOTER */
+      .ft-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
+      .ft-legal-links { flex-wrap: wrap !important; gap: 10px !important; }
+
+      /* 15. CONTENT-VISIBILITY: off-screen sections */
+      .cases, .testimonials, .contact,
+      .leadmag-section, .challenge, .trust {
         content-visibility: auto;
-        contain-intrinsic-size: 0 400px;
+        contain-intrinsic-size: 0 500px;
       }
 
-      /* Reducir transiciones a lo mínimo */
-      *, *::before, *::after {
-        transition-duration: 0.15s !important;
-        animation-duration: var(--dur, revert) !important;
-      }
+      /* 16. SIN TRANSICIONES en elementos touch */
+      .svc-card, .cc, .test-card, .ch-card,
+      .leadmag-card, .ti { transition: none !important; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3938,61 +4055,51 @@
     <div id="mob-splash" aria-hidden="true">
       <div class="splash-scan"></div>
 
-      <!-- SVG Red Neuronal: líneas se dibujan, nodos aparecen, core pulsa -->
-      <svg class="splash-network" viewBox="0 0 320 290" xmlns="http://www.w3.org/2000/svg">
-        <!-- Líneas de conexión exteriores (delgadas, tenues) -->
+      <!-- SVG Red Neuronal simplificado (8 nodos, 8 líneas — máx. rendimiento) -->
+      <svg class="splash-network" viewBox="0 0 320 270" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g fill="none" stroke-linecap="round">
-          <line class="sn-line sn-l1"  x1="28"  y1="44"  x2="102" y2="108" stroke="rgba(0,194,255,0.28)" stroke-width="0.8"/>
-          <line class="sn-line sn-l2"  x1="160" y1="12"  x2="160" y2="108" stroke="rgba(0,194,255,0.28)" stroke-width="0.8"/>
-          <line class="sn-line sn-l3"  x1="292" y1="44"  x2="218" y2="108" stroke="rgba(0,194,255,0.28)" stroke-width="0.8"/>
-          <line class="sn-line sn-l4"  x1="14"  y1="145" x2="102" y2="145" stroke="rgba(0,194,255,0.22)" stroke-width="0.8"/>
-          <line class="sn-line sn-l5"  x1="306" y1="145" x2="218" y2="145" stroke="rgba(0,194,255,0.22)" stroke-width="0.8"/>
-          <line class="sn-line sn-l6"  x1="28"  y1="246" x2="102" y2="182" stroke="rgba(0,194,255,0.28)" stroke-width="0.8"/>
-          <line class="sn-line sn-l7"  x1="160" y1="278" x2="160" y2="182" stroke="rgba(0,194,255,0.28)" stroke-width="0.8"/>
-          <line class="sn-line sn-l8"  x1="292" y1="246" x2="218" y2="182" stroke="rgba(0,194,255,0.28)" stroke-width="0.8"/>
-          <!-- Líneas interiores (al core, más brillantes) -->
-          <line class="sn-line sn-l9"  x1="102" y1="108" x2="160" y2="145" stroke="rgba(0,194,255,0.55)" stroke-width="1.1"/>
-          <line class="sn-line sn-l10" x1="218" y1="108" x2="160" y2="145" stroke="rgba(0,194,255,0.55)" stroke-width="1.1"/>
-          <line class="sn-line sn-l11" x1="102" y1="182" x2="160" y2="145" stroke="rgba(0,194,255,0.55)" stroke-width="1.1"/>
-          <line class="sn-line sn-l12" x1="218" y1="182" x2="160" y2="145" stroke="rgba(0,194,255,0.55)" stroke-width="1.1"/>
-          <!-- Cruz interior -->
-          <line class="sn-line sn-l13" x1="102" y1="108" x2="218" y2="108" stroke="rgba(0,194,255,0.18)" stroke-width="0.7"/>
-          <line class="sn-line sn-l14" x1="102" y1="182" x2="218" y2="182" stroke="rgba(0,194,255,0.18)" stroke-width="0.7"/>
+          <line class="sn-line sn-l1" x1="40"  y1="50"  x2="130" y2="120" stroke="rgba(0,194,255,0.3)"  stroke-width="0.9"/>
+          <line class="sn-line sn-l2" x1="160" y1="18"  x2="160" y2="120" stroke="rgba(0,194,255,0.25)" stroke-width="0.9"/>
+          <line class="sn-line sn-l3" x1="280" y1="50"  x2="190" y2="120" stroke="rgba(0,194,255,0.3)"  stroke-width="0.9"/>
+          <line class="sn-line sn-l4" x1="18"  y1="135" x2="130" y2="135" stroke="rgba(0,194,255,0.22)" stroke-width="0.9"/>
+          <line class="sn-line sn-l5" x1="302" y1="135" x2="190" y2="135" stroke="rgba(0,194,255,0.22)" stroke-width="0.9"/>
+          <line class="sn-line sn-l6" x1="40"  y1="220" x2="130" y2="150" stroke="rgba(0,194,255,0.3)"  stroke-width="0.9"/>
+          <line class="sn-line sn-l7" x1="160" y1="252" x2="160" y2="150" stroke="rgba(0,194,255,0.25)" stroke-width="0.9"/>
+          <line class="sn-line sn-l8" x1="280" y1="220" x2="190" y2="150" stroke="rgba(0,194,255,0.3)"  stroke-width="0.9"/>
+          <line class="sn-line sn-l9"  x1="130" y1="120" x2="160" y2="135" stroke="rgba(0,194,255,0.6)"  stroke-width="1.2"/>
+          <line class="sn-line sn-l10" x1="190" y1="120" x2="160" y2="135" stroke="rgba(0,194,255,0.6)"  stroke-width="1.2"/>
+          <line class="sn-line sn-l11" x1="130" y1="150" x2="160" y2="135" stroke="rgba(0,194,255,0.6)"  stroke-width="1.2"/>
+          <line class="sn-line sn-l12" x1="190" y1="150" x2="160" y2="135" stroke="rgba(0,194,255,0.6)"  stroke-width="1.2"/>
         </g>
-
-        <!-- Halos suaves de nodos interiores -->
-        <g fill="rgba(0,194,255,0.08)">
-          <circle class="sn-node sn-n9"  cx="102" cy="108" r="14"/>
-          <circle class="sn-node sn-n10" cx="218" cy="108" r="14"/>
-          <circle class="sn-node sn-n11" cx="102" cy="182" r="14"/>
-          <circle class="sn-node sn-n12" cx="218" cy="182" r="14"/>
-        </g>
-
-        <!-- Nodos exteriores (pequeños) -->
+        <!-- Nodos exteriores -->
         <g fill="#00C2FF">
-          <circle class="sn-node sn-n1 sn-pulse" cx="28"  cy="44"  r="2.8"/>
-          <circle class="sn-node sn-n2"           cx="160" cy="12"  r="2.4"/>
-          <circle class="sn-node sn-n3 sn-pulse"  cx="292" cy="44"  r="2.8"/>
-          <circle class="sn-node sn-n4"           cx="14"  cy="145" r="2.4"/>
-          <circle class="sn-node sn-n5"           cx="306" cy="145" r="2.4"/>
-          <circle class="sn-node sn-n6 sn-pulse"  cx="28"  cy="246" r="2.8"/>
-          <circle class="sn-node sn-n7"           cx="160" cy="278" r="2.4"/>
-          <circle class="sn-node sn-n8 sn-pulse"  cx="292" cy="246" r="2.8"/>
+          <circle class="sn-node sn-n1 sn-pulse" cx="40"  cy="50"  r="3"/>
+          <circle class="sn-node sn-n2"           cx="160" cy="18"  r="2.5"/>
+          <circle class="sn-node sn-n3 sn-pulse"  cx="280" cy="50"  r="3"/>
+          <circle class="sn-node sn-n4"           cx="18"  cy="135" r="2.5"/>
+          <circle class="sn-node sn-n5"           cx="302" cy="135" r="2.5"/>
+          <circle class="sn-node sn-n6 sn-pulse"  cx="40"  cy="220" r="3"/>
+          <circle class="sn-node sn-n7"           cx="160" cy="252" r="2.5"/>
+          <circle class="sn-node sn-n8 sn-pulse"  cx="280" cy="220" r="3"/>
         </g>
-
-        <!-- Nodos interiores (medianos) -->
-        <g fill="#00C2FF" opacity="0.85">
-          <circle class="sn-node sn-n9"  cx="102" cy="108" r="4.5"/>
-          <circle class="sn-node sn-n10" cx="218" cy="108" r="4.5"/>
-          <circle class="sn-node sn-n11" cx="102" cy="182" r="4.5"/>
-          <circle class="sn-node sn-n12" cx="218" cy="182" r="4.5"/>
+        <!-- Nodos interiores -->
+        <g fill="rgba(0,194,255,0.1)">
+          <circle class="sn-node sn-n9"  cx="130" cy="120" r="12"/>
+          <circle class="sn-node sn-n10" cx="190" cy="120" r="12"/>
+          <circle class="sn-node sn-n11" cx="130" cy="150" r="12"/>
+          <circle class="sn-node sn-n12" cx="190" cy="150" r="12"/>
         </g>
-
-        <!-- Core central: anillos pulsantes + punto -->
-        <circle class="sn-ring"  cx="160" cy="145" r="24" fill="rgba(0,194,255,0.05)" stroke="rgba(0,194,255,0.35)" stroke-width="1"/>
-        <circle class="sn-ring2" cx="160" cy="145" r="16" fill="rgba(0,194,255,0.08)" stroke="rgba(0,194,255,0.25)" stroke-width="0.8"/>
-        <circle class="sn-core"  cx="160" cy="145" r="7"  fill="#00C2FF"/>
-        <circle class="sn-core"  cx="160" cy="145" r="3.5" fill="#fff" opacity="0.75"/>
+        <g fill="#00C2FF" opacity="0.9">
+          <circle class="sn-node sn-n9"  cx="130" cy="120" r="4"/>
+          <circle class="sn-node sn-n10" cx="190" cy="120" r="4"/>
+          <circle class="sn-node sn-n11" cx="130" cy="150" r="4"/>
+          <circle class="sn-node sn-n12" cx="190" cy="150" r="4"/>
+        </g>
+        <!-- Core -->
+        <circle class="sn-ring"  cx="160" cy="135" r="22" fill="rgba(0,194,255,0.05)" stroke="rgba(0,194,255,0.38)" stroke-width="1"/>
+        <circle class="sn-ring2" cx="160" cy="135" r="14" fill="rgba(0,194,255,0.08)" stroke="rgba(0,194,255,0.22)" stroke-width="0.8"/>
+        <circle class="sn-core"  cx="160" cy="135" r="6.5" fill="#00C2FF"/>
+        <circle class="sn-core"  cx="160" cy="135" r="3"   fill="#fff" opacity="0.8"/>
       </svg>
 
       <div class="splash-inner">
@@ -5523,6 +5630,8 @@
       ================================================ */
       const heroSec = qs('#inicio');
       const canvas = qs('#global-canvas');
+      // Mobile: eliminar canvas del DOM — evita todo el JS de partículas en touch
+      if (canvas && window.innerWidth <= 768) { canvas.remove(); }
 
       // Base radial glow follow just for hero
       if (heroSec) {
