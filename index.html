@@ -525,9 +525,10 @@
         background: rgba(6, 9, 18, 0.82);
       }
 
-      /* --- MOBILE: Canvas fully visible for neon effect --- */
+      /* --- MOBILE: Canvas hidden — clean look sin ruido --- */
       .global-canvas {
-        opacity: 1;
+        opacity: 0;
+        display: none;
       }
 
       section {
@@ -538,109 +539,61 @@
         margin-bottom: 40px !important;
       }
 
-      /* --- MOBILE HERO: Full-screen canvas + centered logo first viewport --- */
+      /* --- MOBILE HERO: Single viewport, clean --- */
       .hero {
-        min-height: 200vh !important;
-        padding: 0 !important;
-        display: block !important;
-        align-items: unset !important;
+        min-height: 100vh !important;
+        padding: 100px 0 60px !important;
+        display: flex !important;
+        align-items: flex-start !important;
       }
 
       .hero .container {
-        display: flex;
-        flex-direction: column;
-        min-height: 200vh;
+        display: block;
+        min-height: unset;
       }
 
-      /* Badge and mob-hero-visual: hidden in first viewport, part of flow below */
       .hero .badge {
-        order: 2;
         margin-top: 0;
         margin-bottom: 20px;
-        animation: none;
+        animation: fadeUp .6s .1s both;
       }
 
       .hero .mob-hero-visual {
-        display: none !important; /* replaced by canvas fullscreen */
-      }
-
-      /* Hero text block pushed below first 100vh */
-      .hero h1,
-      .hero .hero-lead,
-      .hero .cta-microcopy,
-      .hero .hero-ctas,
-      .hero .hero-stats,
-      .hero .badge {
-        order: 2;
+        display: none !important;
       }
 
       .hero h1 {
         margin-top: 0;
-        padding: 0 4px;
-        font-size: clamp(1.9rem, 7vw, 2.8rem) !important;
+        padding: 0;
+        font-size: clamp(1.8rem, 6.5vw, 2.6rem) !important;
+        animation: fadeUp .6s .2s both;
       }
 
-      /* Spacer that pushes text below the fold */
-      .mob-hero-spacer {
-        display: block;
-        order: 1;
-        height: 100vh;
-        flex-shrink: 0;
+      .hero .hero-lead {
+        animation: fadeUp .6s .3s both;
+        font-size: 1rem !important;
       }
 
-      .hero .container > * {
-        position: relative;
-        z-index: 3;
-      }
-
-      /* Hero text content wrapper */
-      .hero-text-block {
-        order: 2;
-        padding: 60px 0 80px;
-      }
-
-      /* --- MOBILE CENTERED LOGO --- */
-      .mob-logo-center {
-        display: flex !important;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        align-items: center;
-        justify-content: center;
+      .hero .hero-ctas {
+        animation: fadeUp .6s .4s both;
         flex-direction: column;
-        pointer-events: none;
-        z-index: 10;
-        gap: 16px;
+        gap: 12px;
       }
 
-      .mob-logo-center .mob-logo-text {
-        font-family: var(--mono);
-        font-size: 2.2rem;
-        font-weight: 700;
-        letter-spacing: 0.18em;
-        background: linear-gradient(90deg, #fff, var(--text2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: none;
-        filter: drop-shadow(0 0 18px rgba(0, 194, 255, 0.7));
+      .hero .hero-stats {
+        animation: fadeUp .6s .5s both;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
       }
 
-      .mob-logo-center .mob-logo-sub {
-        font-family: var(--mono);
-        font-size: 0.65rem;
-        letter-spacing: 0.22em;
-        color: var(--cyan);
-        text-transform: uppercase;
-        opacity: 0.8;
+      /* Spacer — hidden, ya no necesario */
+      .mob-hero-spacer {
+        display: none !important;
       }
 
-      .mob-logo-center .mob-logo-hex {
-        width: 42px;
-        height: 42px;
-        filter: drop-shadow(0 0 16px var(--cyan));
+      /* Mob-logo-center — reemplazado por splash */
+      .mob-logo-center {
+        display: none !important;
       }
 
       section.tech {
@@ -3580,6 +3533,242 @@
         transition: opacity .5s ease, transform .5s ease, border-color .3s, box-shadow .3s;
       }
     }
+
+    /* ================================================
+       MOBILE SPLASH SCREEN
+    ================================================ */
+    #mob-splash {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      #mob-splash {
+        display: flex;
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #060912;
+        overflow: hidden;
+        transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.9s ease;
+        will-change: transform;
+      }
+
+      #mob-splash.splash-hide {
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Ambient radial glow */
+      #mob-splash::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse 90% 55% at 50% 20%, rgba(0, 194, 255, 0.10) 0%, transparent 70%),
+          radial-gradient(ellipse 60% 40% at 85% 85%, rgba(79, 70, 229, 0.09) 0%, transparent 70%);
+        pointer-events: none;
+      }
+
+      /* Subtle grid */
+      #mob-splash::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 194, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 194, 255, 0.03) 1px, transparent 1px);
+        background-size: 44px 44px;
+        mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black, transparent 90%);
+        pointer-events: none;
+      }
+
+      /* Scanning line */
+      .splash-scan {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(0, 194, 255, 0.6), transparent);
+        animation: splashScan 3s ease-in-out 0.5s infinite;
+        pointer-events: none;
+      }
+
+      @keyframes splashScan {
+        0%   { top: 0%; opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 1; }
+        100% { top: 100%; opacity: 0; }
+      }
+
+      .splash-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 0 28px;
+      }
+
+      /* ── Hexagon icon ── */
+      .splash-hex {
+        width: 68px;
+        height: 68px;
+        margin-bottom: 24px;
+        opacity: 0;
+        transform: scale(0.4) rotate(-45deg);
+        animation: splashHexIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+        filter: drop-shadow(0 0 22px rgba(0, 194, 255, 0.7));
+      }
+
+      @keyframes splashHexIn {
+        to { opacity: 1; transform: scale(1) rotate(0deg); }
+      }
+
+      /* ── Brand name ── */
+      .splash-brand {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        margin-bottom: 6px;
+        opacity: 0;
+        transform: translateY(16px);
+        animation: splashSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+      }
+
+      .splash-brand .sp-open { color: #fff; }
+      .splash-brand .sp-core { color: #00C2FF; }
+
+      @keyframes splashSlideUp {
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── Tagline ── */
+      .splash-sub {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.58rem;
+        letter-spacing: 0.26em;
+        color: #8AAEE0;
+        text-transform: uppercase;
+        margin-bottom: 44px;
+        opacity: 0;
+        animation: splashFade 0.5s ease 1.35s forwards;
+      }
+
+      @keyframes splashFade {
+        to { opacity: 1; }
+      }
+
+      /* ── Stats card ── */
+      .splash-stats {
+        display: flex;
+        width: 100%;
+        max-width: 340px;
+        border: 1px solid rgba(0, 194, 255, 0.14);
+        border-radius: 18px;
+        overflow: hidden;
+        background: rgba(0, 194, 255, 0.03);
+        margin-bottom: 44px;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: splashSlideUp 0.55s ease 1.65s forwards;
+        box-shadow: 0 0 40px rgba(0, 194, 255, 0.05), inset 0 1px 0 rgba(0, 194, 255, 0.06);
+      }
+
+      .splash-stat {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 8px;
+        border-right: 1px solid rgba(0, 194, 255, 0.1);
+        gap: 4px;
+      }
+
+      .splash-stat:last-child { border-right: none; }
+
+      .splash-stat-num {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #00C2FF;
+        line-height: 1;
+        letter-spacing: -0.02em;
+      }
+
+      .splash-stat-lbl {
+        font-size: 0.58rem;
+        color: #8AAEE0;
+        text-align: center;
+        line-height: 1.35;
+        letter-spacing: 0.02em;
+      }
+
+      /* ── Scroll indicator ── */
+      .splash-scroll-hint {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        animation: splashFade 0.5s ease 2.1s forwards;
+      }
+
+      .splash-scroll-txt {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.52rem;
+        letter-spacing: 0.22em;
+        color: #8AAEE0;
+        text-transform: uppercase;
+      }
+
+      .splash-scroll-arrow {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        animation: splashBounce 1.4s ease-in-out 2.2s infinite;
+      }
+
+      .splash-scroll-arrow span {
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-right: 1.5px solid rgba(0, 194, 255, 0.6);
+        border-bottom: 1.5px solid rgba(0, 194, 255, 0.6);
+        transform: rotate(45deg);
+      }
+
+      .splash-scroll-arrow span:nth-child(2) {
+        opacity: 0.5;
+        margin-top: -5px;
+      }
+
+      @keyframes splashBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(6px); }
+      }
+
+      /* Tap to skip label */
+      .splash-skip {
+        position: absolute;
+        bottom: 32px;
+        right: 28px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.5rem;
+        letter-spacing: 0.15em;
+        color: rgba(138, 174, 224, 0.4);
+        text-transform: uppercase;
+        opacity: 0;
+        animation: splashFade 0.5s ease 2.5s forwards;
+        cursor: pointer;
+      }
+    }
   </style>
 </head>
 
@@ -3641,16 +3830,51 @@
 ======================================================== -->
     <canvas id="global-canvas" class="global-canvas"></canvas>
 
-    <!-- MOBILE: Centered logo overlay (fixed, visible only on mobile) -->
-    <div class="mob-logo-center" aria-hidden="true">
-      <svg class="mob-logo-hex" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 1L38 11V35L20 45L2 35V11L20 1Z" stroke="#00C2FF" stroke-width="1.5" fill="rgba(0,194,255,0.06)"/>
-        <path d="M20 8L33 15.5V30.5L20 38L7 30.5V15.5L20 8Z" fill="rgba(0,194,255,0.08)" stroke="rgba(0,194,255,0.3)" stroke-width="1"/>
-        <circle cx="20" cy="23" r="4" fill="#00C2FF" opacity="0.9"/>
-      </svg>
-      <span class="mob-logo-text">OPENCORE</span>
-      <span class="mob-logo-sub">Enterprise Consulting</span>
+    <!-- MOBILE SPLASH SCREEN — solo visible en mobile -->
+    <div id="mob-splash" aria-hidden="true">
+      <div class="splash-scan"></div>
+      <div class="splash-inner">
+        <!-- Hex logo -->
+        <svg class="splash-hex" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 2L57 17.5V52.5L30 68L3 52.5V17.5L30 2Z" stroke="#00C2FF" stroke-width="1.5" fill="rgba(0,194,255,0.05)"/>
+          <path d="M30 13L50 24.5V47.5L30 59L10 47.5V24.5L30 13Z" fill="rgba(0,194,255,0.09)" stroke="rgba(0,194,255,0.28)" stroke-width="1"/>
+          <circle cx="30" cy="36" r="6.5" fill="#00C2FF" opacity="0.88"/>
+          <circle cx="30" cy="36" r="3" fill="#fff" opacity="0.5"/>
+        </svg>
+        <!-- Brand -->
+        <div class="splash-brand">
+          <span class="sp-open">OPEN</span><span class="sp-core">CORE</span>
+        </div>
+        <div class="splash-sub">Enterprise Consulting · Chile</div>
+        <!-- Stats -->
+        <div class="splash-stats">
+          <div class="splash-stat">
+            <div class="splash-stat-num" id="sc1">0+</div>
+            <div class="splash-stat-lbl">Años<br>Experiencia</div>
+          </div>
+          <div class="splash-stat">
+            <div class="splash-stat-num" id="sc2">0%</div>
+            <div class="splash-stat-lbl">Uptime<br>Garantizado</div>
+          </div>
+          <div class="splash-stat">
+            <div class="splash-stat-num" id="sc3">$0M+</div>
+            <div class="splash-stat-lbl">Ahorros<br>Generados</div>
+          </div>
+        </div>
+        <!-- Scroll hint -->
+        <div class="splash-scroll-hint">
+          <div class="splash-scroll-txt">Desliza para continuar</div>
+          <div class="splash-scroll-arrow">
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <div class="splash-skip" id="splash-skip">Toca para saltar</div>
     </div>
+
+    <!-- Mob-logo-center hidden — replaced by splash -->
+    <div class="mob-logo-center" aria-hidden="true" style="display:none!important"></div>
 
     <section class="hero" id="inicio">
       <div class="hero-bg"></div>
@@ -5133,13 +5357,6 @@
       const navbar = qs('#navbar');
       window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', scrollY > 30);
-        // Fade out mobile centered logo on scroll
-        const mobLogo = document.querySelector('.mob-logo-center');
-        if (mobLogo) {
-          const fade = Math.max(0, 1 - scrollY / (window.innerHeight * 0.6));
-          mobLogo.style.opacity = fade;
-          mobLogo.style.pointerEvents = fade < 0.05 ? 'none' : 'none';
-        }
       }, { passive: true });
 
       /* ================================================
@@ -5550,6 +5767,68 @@
       }
 
     })();
+  </script>
+
+  <!-- MOBILE SPLASH SCREEN LOGIC -->
+  <script>
+  (function () {
+    var splash = document.getElementById('mob-splash');
+    if (!splash) return;
+    if (window.innerWidth > 768) { splash.style.display = 'none'; return; }
+
+    // Lock scroll while splash is active
+    document.body.style.overflow = 'hidden';
+
+    // ── Counter animation ──
+    function animCount(el, target, prefix, suffix, duration) {
+      var start = performance.now();
+      (function tick(now) {
+        var p = Math.min((now - start) / duration, 1);
+        var ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + Math.floor(ease * target) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = prefix + target + suffix;
+      })(start);
+    }
+
+    setTimeout(function () {
+      animCount(document.getElementById('sc1'), 25, '', '+', 1000);
+      animCount(document.getElementById('sc2'), 98, '', '%', 1200);
+      animCount(document.getElementById('sc3'), 10, '$', 'M+', 1100);
+    }, 1700);
+
+    // ── Dismiss function ──
+    var dismissed = false;
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      splash.classList.add('splash-hide');
+      document.body.style.overflow = '';
+      setTimeout(function () { splash.style.display = 'none'; }, 950);
+    }
+
+    // Dismiss on scroll
+    window.addEventListener('scroll', dismiss, { once: true, passive: true });
+
+    // Dismiss on swipe up
+    var ty0 = 0;
+    splash.addEventListener('touchstart', function (e) { ty0 = e.touches[0].clientY; }, { passive: true });
+    splash.addEventListener('touchend', function (e) {
+      if (ty0 - e.changedTouches[0].clientY > 28) dismiss();
+    }, { passive: true });
+
+    // Dismiss on tap skip
+    var skipBtn = document.getElementById('splash-skip');
+    if (skipBtn) skipBtn.addEventListener('click', dismiss);
+
+    // Dismiss on tap anywhere after 2.5s
+    setTimeout(function () {
+      splash.addEventListener('click', dismiss, { once: true });
+    }, 2500);
+
+    // Auto dismiss after 5.5s
+    setTimeout(dismiss, 5500);
+  })();
   </script>
 
   <!-- LEGAL MODALS -->
